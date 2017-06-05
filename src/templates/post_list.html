@@ -1,40 +1,71 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class='col-sm-6 col-sm-offset-3'> 
-    <h1>{{ title }}</h1>
-<form method='GET' action='' class='row'>
-    <div class='col-sm-6'>
-        <div class='input-group'>
-            <input class='form-control' type='text' name='q' placeholder='Search posts' value= '{{ request.GET.q }}' />
-            <span class='input-group-btn'>
-                <!-- <input class='btn btn-default' type='submit' value='Search' /> -->
-                <button class='btn btn-default' type='button'><i class='fa fa-2x fa-search'></i></button>
-            </span>
-        </div>  
-    </div>
-</form>
+<main class="main">
+    <header class="header">
+        <div>
+        <ol class='breadcrumb'>
+            <li><a href='{% url "posts:list" %}'>Home</a></li>
+            {% block post_detail_link %}
+            {% endblock %}
 
-{% for obj in object_list %}
-<div class='row'>
-    <div class="col-sm-12">
-        <div class="thumbnail">
-            {% if obj.image %}
-            <img src='{{ obj.image.url }}' class='img-responsive' />
+            {% if not request.user.is_authenticated %}
+            <li class='pull-right'><a href='{% url "register" %}'>Register</a></li>
+            <li class='pull-right'><a href='{% url "login" %}'>Login</a></li>
+            {% else %}
+            <li class='pull-right'><a href='{% url "logout" %}'>Logout</a></li>
             {% endif %}
-            <div class="caption post-detail-item">
-                {% if obj.draft %}<h3>Staff only: Draft</h3>{% endif %} {% if obj.publish > today %}<h3>Staff only: Future Post</h3>{% endif %}
-                <h3><a href='{{ obj.get_absolute_url }}'>{{ obj.title }}</a> <small>{{ obj.publish }}</small></h3>
-                {% if obj.user.get_full_name %}<p>Author: {{ obj.user.get_full_name }}</p>{% endif %}
-                {{ obj.get_markdown|truncatechars_html:120 }}
-                <p><a href="{{ obj.get_absolute_url }}" class="btn btn-primary" role="button">View</a></p>
-            </div>
+            </ol>
         </div>
-    </div>
-    <hr/>
-</div>
-<!-- {% cycle '' "<div class='col-sm-12'><hr/></div></div><div class='row'>" %} -->
+        <div class='search'>
+            <form  method='GET' action=''>
+                <input class='searchTerm' type='text' name='q' placeholder='Search posts...' value='{{ request.GET.q }}' onfocus="if(this.placeholder == 'Search posts...') { this.placeholder = ''; }" onfocusout="if(this.placeholder == '') { this.placeholder = 'Search posts...'; }"/>
+                <span class='SearchButton'><i class="fa fa-search"></i></span>
+            </form>
+        </div>
+
+        <!-- <div class='search'>
+            <div class='search_container'>
+                <form method='GET' action=''>
+                    <span class='icon'><i class="fa fa-search"></i></span>
+                    <input type='text' name='q' placeholder='Search posts...' value= '{{ request.GET.q }}'>
+                </form>
+            </div>
+        </div> -->
+    </header>
+</main>
+
+<hr />
+{% for obj in object_list %}
+        <div class="blog">
+            <div class="container">
+                <div class="blog-posts">
+                    <div class="blog-post-box ">
+                        <div class="blog-post-feature">
+                            <div class="blog-post-image">
+                                <img src='{{ obj.image.url }}' />
+                            </div>
+                        </div>
+                        <div class="blog-post-info">
+                            <h3>
+                                <a href='{{ obj.get_absolute_url }}'>{{ obj.title }}</a>
+                            </h3>
+                            <div class="blog-post-meta">
+                                {{ obj.publish }}
+                            </div>
+                            <div class="blog-post-excerpt">
+                                <p>{{ obj.get_markdown|truncatechars_html:250 }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <!-- blog-posts -->
+            </div>
+            <!-- container -->
+        </div>
 {% endfor %}
+
 
 <!-- pagination https://docs.djangoproject.com/en/1.11/topics/pagination/ Using Paginator as view-->
 <div class="pagination">
