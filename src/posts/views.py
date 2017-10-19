@@ -95,7 +95,7 @@ def post_list(request): #list
 				Q(user__first_name__icontains=query) |
 				Q(user__last_name__icontains=query) 
 				).distinct()
-	paginator = Paginator(queryset_list, 2) # Show 25 queryset per page                 # pagination
+	paginator = Paginator(queryset_list, 30) # Show 25 queryset per page                 # pagination
 	page_request_var = 'page'                                                       # https://docs.djangoproject.com/en/1.11/topics/pagination/
 	page = request.GET.get(page_request_var)										# Using Paginator as view
 	try:																			# pagination

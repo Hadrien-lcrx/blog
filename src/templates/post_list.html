@@ -3,8 +3,8 @@
 
 <main class="main">
     <header class="header">
-        <div>
-        <ol class='breadcrumb'>
+        <!-- <div> -->
+        <!-- <ol class='breadcrumb'>
             <li><a href='{% url "posts:list" %}'>Home</a></li>
             {% block post_detail_link %}
             {% endblock %}
@@ -15,8 +15,19 @@
             {% else %}
             <li class='pull-right'><a href='{% url "logout" %}'>Logout</a></li>
             {% endif %}
+            </ol> 
+        </div> -->
+        <div class='nav'>
+            <ol class='breadcrumb'>
+                <li><a href='{% url "posts:list" %}'>Home</a></li>
             </ol>
         </div>
+        <div>
+            <ol class='navbar'>
+                <li id='portfolio'><a href='https://www.portfolio.hadrien.ai'>Portfolio</a></li>
+            </ol>
+        </div>
+
         <div class='search'>
             <form  method='GET' action=''>
                 <input class='searchTerm' type='text' name='q' placeholder='Search posts...' value='{{ request.GET.q }}' onfocus="if(this.placeholder == 'Search posts...') { this.placeholder = ''; }" onfocusout="if(this.placeholder == '') { this.placeholder = 'Search posts...'; }"/>
@@ -35,7 +46,9 @@
     </header>
 </main>
 
-<hr />
+<div class='space'>
+</div>
+
 {% for obj in object_list %}
         <div class="blog">
             <div class="container">
@@ -43,7 +56,7 @@
                     <div class="blog-post-box ">
                         <div class="blog-post-feature">
                             <div class="blog-post-image">
-                                <img src='{{ obj.image.url }}' />
+                                <a href='{{ obj.get_absolute_url }}'><img src='{{ obj.image.url }}' /></a>
                             </div>
                         </div>
                         <div class="blog-post-info">
